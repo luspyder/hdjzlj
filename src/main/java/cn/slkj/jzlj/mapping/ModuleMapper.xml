@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.jzlj.dao.ModuleMapper">
+	<sql id="sql_base">
+		ID,P_ID,NAME,URL,ICON,PRIORITY,DESCRIPTION,SORT
+	</sql>
+	<select id="getAll" resultType="Module" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM TB_MODULE
+		<where>
+			<if test="pid != null and pid != ''">
+				AND P_ID = #{pid}
+			</if>
+			<if test="priority != null  and priority != ''">
+				AND PRIORITY &lt; #{priority}
+			</if>
+		</where>
+		ORDER BY SORT
+	</select>
+
+	<select id="getModuleByRoleId" parameterType="hashmap" resultType="Module">
+		SELECT DISTINCT TBR.* FROM TB_MODULE TBR ,TB_ROLE_RES TBRR
+		WHERE TBR.ID = TBRR.MODULE_ID
+		<if test="roleid != null and roleid != ''">
+			AND TBRR.ROLE_ID = #{roleid}
+		</if>
+		<if test="priority != null and priority !=''">
+			AND TBR.PRIORITY &lt; #{priority}
+		</if>
+		ORDER BY TBR.sort
+		<!-- AND ID != '1' -->
+	</select>
+
+	<insert id="saveRoleRes" parameterType="hashmap">
+		INSERT INTO TB_ROLE_RES(ROLE_ID,MODULE_ID)
+		VALUES
+		<foreach collection="ids" item="item" index="index" separator=",">
+			(#{roleid}, #{item} )
+		</foreach>
+	</insert>
+	
+	<delete id="deleteRoleRes" parameterType="hashmap">
+		DELETE FROM TB_ROLE_RES WHERE  ROLE_ID = #{roleid}
+	</delete>
+
+</mapper>

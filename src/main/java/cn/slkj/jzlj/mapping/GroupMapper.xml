@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.jzlj.dao.GroupMapper">
+
+	<sql id="sql_base">
+		id,name
+	</sql>
+	<select id="getAll" resultType="Group" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base" />
+		FROM GPS_GROUPS
+	</select>
+
+	<insert id="save" parameterType="Group">
+		IF NOT EXISTS (SELECT * FROM gps_groups WHERE id =#{id})
+		BEGIN
+			INSERT INTO gps_groups(  id,name ) VALUES(#{id},#{name} )
+		END
+	</insert>
+</mapper>

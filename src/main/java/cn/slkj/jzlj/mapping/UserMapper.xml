@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.jzlj.dao.UserMapper">
+
+	<sql id="sql_base">
+		ID,USERNAME,PASSWORD,STATUS,REALNAME,SEX,EMAIL,PHONE,ADDRESS,CREATE_TIME,LASTTIME,REMARK,ROLEID
+	</sql>
+
+	<select id="login" parameterType="hashmap" resultType="User">
+		SELECT  <include refid="sql_base"></include> FROM TB_USER WHERE USERNAME = #{username} AND PASSWORD = #{password} AND STATUS =#{status}
+	</select>
+	<select id="getAllUsers" resultType="User">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM TB_USER
+		<where>
+			<if test="status != null and status != ''">
+				AND STATUS = #{status}
+			</if>
+			<if test="username != null and username != ''">
+				AND USERNAME LIKE '%'+#{username}+'%'
+			</if>
+			<if test="realname != null and realname != ''">
+				AND REALNAME LIKE '%'+#{realname}+'%'
+			</if>
+			<if test="roleId != null and roleId != ''">
+				AND ROLEID = #{roleId} 
+			</if>
+		</where>
+	</select>
+
+	<select id="queryOne" parameterType="hashmap" resultType="User">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM tb_user
+		<where>
+			<if test="username != null and   username != ''">
+				AND USERNAME = #{username}
+			</if>
+			<if test="password != null and   password != ''">
+				AND PASSWORD = #{password}
+			</if>
+			<if test="id != null and   id != ''">
+				AND ID = #{id}
+			</if>
+		</where>
+	</select>
+	<insert id="save" parameterType="User">
+		INSERT INTO TB_USER(
+		  USERNAME,PASSWORD,STATUS,EMAIL,REALNAME,SEX,PHONE,CREATE_TIME,LASTTIME,REMARK,ROLEID,ADDRESS
+		)
+		VALUES(#{username},'000000',#{status},#{email},#{realname},#{sex},
+        #{phone},#{create_time},#{lastTime},#{remark},#{roleId},#{address})
+	</insert>
+
+	<delete id="delete" parameterType="string">
+		DELETE FROM tb_user WHERE ID =#{id}
+	</delete>
+
+	<update id="edit" parameterType="User">
+		UPDATE tb_user SET STATUS=#{status}
+		,EMAIL=#{email},REALNAME=#{realname},SEX=#{sex},PHONE=#{phone},
+        REMARK=#{remark}, roleId=#{roleId},address = #{address}
+		WHERE ID = #{id}
+	</update>
+
+	<update id="valid" parameterType="hashmap">
+		UPDATE tb_user SET STATUS=#{status} WHERE ID IN
+		<foreach collection="ids" item="id" index="index" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="resetPwd" parameterType="list">
+		UPDATE tb_user SET PASSWORD='000000' WHERE ID IN
+		<foreach item="ids" collection="array" open="(" separator=","
+			close=")">
+			#{ids}
+		</foreach>
+	</update>
+</mapper>

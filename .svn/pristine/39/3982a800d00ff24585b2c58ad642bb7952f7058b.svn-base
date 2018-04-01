@@ -1,0 +1,227 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit"  />
+
+    <title>处置证申报表</title>
+    <%-- <%@ include file="../common/taglibs.jsp"%> --%>
+    <!--系统样式 -->
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.0.min.js"></script>
+    <script src="${pageContext.request.contextPath}/js/LodopFuncs.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/DateUtil.js" type="text/javascript"></script>
+    <script src="${pageContext.request.contextPath}/js/SL.easyUI.js" type="text/javascript"></script>
+
+
+
+    <style type="text/css" id="style1">
+        li {
+            list-style-type: none;
+        }
+
+        .table {
+            border: solid black;
+            border-width: 0px 0px 0px 0px;
+            font－size: 11px;
+        }
+
+        .table td {
+            border: solid black;
+            border-width: 1px 0px 0px 1px;
+            padding: 5px 5px;
+        }
+
+        body {
+            height: 1123px;
+            width: 740px;
+            /* to centre page on screen*/
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script type="text/javascript">
+        var spyj1 = "<h3>同意全部外运，必须保证工地出入口防污地排及冲洗设施有效，不污染城市道路；按指定时间、路线、方式行驶和倾倒。否则，按照有关规定予以处罚。</h3>";
+        var spyj2 = "<h3>同意全部原地堆放,但必须采取苫盖防尘措施，不得私自外运，回填时通知我处管理人员现场勘查。否则，按照有关规定予以处罚。</h3>";
+        var spyj3 = "<h3>同意建设（施工）单位意见，中转（施工）建筑必须采取苫盖防尘措施，回填时通知我处管理人员现场勘查。否则，按照有关规定予以处罚。</h3>";
+        var spyj4 = "<h3>同意建设（施工）单位意见,外运建筑垃圾，必须保证工地出入口防污地排及冲洗设施有效，不污染城市道路；堆放建筑垃圾必须采取苫盖防尘措施，回填时通知我处管理人员现场勘查。否则，按照有关规定予以处罚。</h3>";
+        var spyj5 = "<h3>同意建设（施工）单位意见,外运建筑垃圾，必须保证工地出入口防污地排及冲洗设施有效，不污染城市道路；中转（内倒）后必须采取有效措施，不得扬尘，防止污染城市环境，回填时通知我处管理人员现场勘查。否则，按照有关规定予以处罚。</h3>";
+        var Request = new Object();
+        Request = GetRequest();
+        var pageData;
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "../qyz/selectOne.htmls",
+                data: {
+                    id: Request["id"],
+                },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    pageData = data;
+                    if (data) {
+                        if (data.cqtype != null && data.cqtype != ""
+                            && data.cqtype != "null") {
+                            $("#P_cqtype").html(data.gcType + "-" + data.cqtype);
+                        } else {
+                            $("#P_cqtype").html(data.gcType);
+                        }
+                        $("#P_jsUnit").html(data.jsUnit);
+                        $("#P_gcName").html(data.gcName);
+                        $("#P_site").html(data.site);
+                        $("#P_sgUnit").html(data.sgUnit);
+                        $("#P_tonnage").html(data.tonnage);
+
+                        $("#P_groupName").html(data.groupName);
+                        $("#P_czArea").html(data.czArea);
+                    }
+                }
+            });
+        });
+
+        var LODOP; //声明为全局变量
+        function initView() {
+            LODOP = getLodop();
+            LODOP.PRINT_INITA(0, 0, 800, 982, "第二次申报表");
+            var qydw = $("#P_groupName").text();
+            var czdd = $("#P_czArea").text();
+            var spyj = $("#spyj").text();
+
+// 	/ 		LODOP.SET_SHOW_MODE("BKIMG_WIDTH", "183.09mm");
+// 		LODOP.SET_SHOW_MODE("BKIMG_HEIGHT", "258.76mm");
+// 		LODOP.SET_SHOW_MODE("BKIMG_IN_PREVIEW", true);
+            LODOP.ADD_PRINT_TEXT(390, 191, 371, 30, qydw);
+            LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+            LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+            LODOP.ADD_PRINT_TEXT(450, 189, 379, 29, czdd);
+            LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+            LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+            LODOP.ADD_PRINT_TEXT(500, 189, 527, 179, spyj);
+            LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+            LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+
+            var date1 = DateUtil.strToDate(pageData.entryTime);
+            LODOP.ADD_PRINT_TEXT(645, 510, 187, 30, DateUtil.dateToStr("yyyy年MM月dd日", date1));
+            LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+            LODOP.ADD_PRINT_TEXT(612, 530, 100, 30, "盖章");
+            LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+
+
+        }
+        function CreateOneFormPage() {
+            initView();
+            LODOP.ADD_PRINT_HTM("10mm", 34, "RightMargin:0.9cm", "BottomMargin:9mm", "");
+            LODOP.PRINTA();
+// 		LODOP.PREVIEW();
+        }
+        function toHendl(t) {
+            switch (t) {
+                case 1:
+                    $("#spyj").html(spyj1);
+                    break;
+                case 2:
+                    $("#spyj").html(spyj2);
+                    break;
+                case 3:
+                    $("#spyj").html(spyj3);
+                    break;
+                case 4:
+                    $("#spyj").html(spyj4);
+                    break;
+                case 5:
+                    $("#spyj").html(spyj5);
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+<input type="button" value="打印申报表" onclick="CreateOneFormPage(1)" />
+<div id="print_div">
+    <div style="line-height: 40px; margin-bottom: 30px; text-align: center; font-size: 28px; font-weight: bold; font-family: '宋体'">
+        建筑垃圾处置申报表
+    </div>
+    <table class="table" id="table">
+        <tr>
+            <td style="height: 30px;; width: 90px;" nowrap="nowrap">建设单位</td>
+            <td style="height: 30px; width: 430px"><span id="P_jsUnit"></span></td>
+            <td style="height: 30px; width: 90px;" nowrap="nowrap">工程名称</td>
+            <td style="height: 30px; width: 430px"><span id="P_gcName"></span></td>
+            <td
+                    style="height: 100%; width: 5px; border-right: none; border-bottom: none; border-top: none; vertical-align: middle; margin: 0 auto; width: 20px; line-height: 24px;"
+                    rowspan="14"><span id="right_Text"></span></td>
+        </tr>
+        <tr>
+            <td height="30px">施工地点</td>
+            <td height="30px"><span id="P_site"></span></td>
+            <td height="30px">施工单位</td>
+            <td height="30px"><span id="P_sgUnit"></span></td>
+        </tr>
+        <tr>
+            <td height="30px">垃圾种类</td>
+            <td height="30px"><span id="P_cqtype"></span></td>
+            <td height="30px" nowrap="nowrap">垃圾产量（T）</td>
+            <td height="30px"><span id="P_tonnage"></span></td>
+        </tr>
+        <tr>
+            <td rowspan="5" style="text-align: center;">申<br>报<br>处<br>置<br>方<br>式
+            </td>
+            <td><label><input type="radio" name="types" onclick="toHendl(1)" />1、全部外运 </label></td>
+            <td rowspan="5" colspan="2">
+                <ul>
+                    <li style="float: left; padding-left: 10px">建<br>设<br>单<br>位
+                    </li>
+                    <li style="float: right; padding-right: 5px; padding-top: 60px">（盖章）<br>年 &nbsp;&nbsp; 月&nbsp;&nbsp; &nbsp;日
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><label><input type="radio" name="types" onclick="toHendl(2)" /> 2、全部原地堆放 </label></td>
+        </tr>
+        <tr>
+            <td><label> <input type="radio" name="types" onclick="toHendl(3)" />3、全部中转（内倒）
+            </label></td>
+        </tr>
+        <tr>
+            <td><label> <input type="radio" name="types" onclick="toHendl(4)" />4、部分外运，部分堆放
+            </label></td>
+        </tr>
+        <tr>
+            <td nowrap="nowrap"><label> <input type="radio" name="types" onclick="toHendl(5)" />5、部分外运，部分中转 （内倒）
+            </label></td>
+        </tr>
+        <tr>
+            <td height="30px">承运单位</td>
+            <td colspan="3"><span id="P_groupName"></span></td>
+        </tr>
+        <tr align="center">
+            <td height="30px" colspan="4"><b>以下由管理部门填写</b></td>
+        </tr>
+        <tr>
+            <td height="30px">处置地点</td>
+            <td colspan="3"><span id="P_czArea"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;"><br> <br>管<br>理<br>部<br>门<br>审<br>批<br>意<br>见<br> <br>
+                <br></td>
+            <td colspan="3"><span id="spyj"></span></td>
+        </tr>
+        <tr>
+            <td style="text-align: center;">备<br> <br> <br> <br> <br> <br> <br> <br>注
+            </td>
+            <td colspan="3" style="padding: 20px 10px 20px 10px;">
+                1、建设、施工单位在需要处置（倾倒、运输、中转、回填、消纳、利用）建筑垃圾时，应提前五日按照申报表要求到邯郸市建筑垃圾管理处申报。 <br> <br>2、管理部门在接到申报表后，三日内核实以上内容进行审批，经核实审批后，申请单位不得变更审批内容，否则按有关规定予以处罚。
+                <br> <br>3、建设或施工单位应安装要求围帐施工，硬化施工场地，工地出入口设置防污冲洗设施，保持周围环境整洁卫生。 <br> <br>4、承运单位必须按照《清运证》规定的时间、路线、地点进行行驶和倾倒，不得带泥行驶污染路面。否则，将依据有关规定予以处罚。
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4" style="text-align: center; border-bottom-width: 1px">
+                邯郸市建筑垃圾管理处地址:&nbsp;&nbsp;邯郸市高开区诚信路4号&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：7021769
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

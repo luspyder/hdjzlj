@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.jzlj.dao.PeccancyMapper">
+
+	<sql id="sql_base_pp">
+		id,name,pecTime,carId,carNumber,pecType,behavior,place,state,djTime
+	</sql>
+
+	<sql id="sql_base_pc">
+	</sql>
+	<select id="getAllPP" resultType="PPersonal">
+		SELECT
+		tbpp.id,name,pecTime,carId,pecType,behavior,place,state,djTime,gpsv.carName as carNumber,gpsv.selfNumber
+		FROM tb_PPersonal tbpp,gps_vehiclesInfo gpsv
+		<where>
+			tbpp.carId = gpsv.id
+			<if test="carNumber != null and carNumber != ''">
+				AND gpsv.carName LIKE '%'+#{carNumber}+'%'
+			</if>
+			<if test="pecTimeStart != null and pecTimeStart != ''">
+				AND pecTime >= #{pecTimeStart}
+			</if>
+			<if test="pecTimeEend != null and pecTimeEend != ''"> 
+				AND ENTRYTIME &lt;= #{pecTimeEend}
+			</if>
+			<if test="state != null and state != ''"> 
+				AND state = #{state}
+			</if>
+		</where>
+	</select>
+	<select id="getAllPC" resultType="PCompany">
+		<!-- SELECT -->
+		<!-- <include refid="sql_base_pc"></include> -->
+		<!-- FROM TB_QYZ -->
+		<!-- <where> -->
+		<!-- <if test="gcName != null and gcName != ''"> -->
+		<!-- AND GCNAME LIKE '%'+#{gcName}+'%' -->
+		<!-- </if> -->
+		<!-- </where> -->
+	</select>
+	<insert id="savePPersonal" parameterType="PPersonal">
+			INSERT INTO tb_PPersonal(name,pecTime,carId,carNumber,pecType,behavior,place,state,djTime)
+			VALUES(#{name},#{pecTime},#{carId},#{carNumber},#{pecType},#{behavior},#{place},#{state},#{djTime} )
+	</insert>
+	
+	<update id="PPHandle" parameterType="hashmap">
+		UPDATE tb_PPersonal SET state=#{state}
+		WHERE ID = #{id}
+	</update>
+</mapper>

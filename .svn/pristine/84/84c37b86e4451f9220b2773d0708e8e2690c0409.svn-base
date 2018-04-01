@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.jzlj.dao.QyzMapper">
+
+	<sql id="sql_base">
+		id,regNumber,gcType,cqtype,jsUnit,sgUnit,gcName,site,fee,feeType,area,flat,
+		tonnage,price,remark,manager,entryTime,state,feeManager,feeEntryTime,
+		handle,czArea,hdManager,hdEntryTime,approved,apManager,apEntryTime,groupId,
+		(SELECT name FROM gps_groups where id= groupId) as groupName,zNumber,
+		jsContact,jsTelephone,sgContact,sgTelephone,photo
+	</sql>
+
+
+	<select id="getAll" resultType="Qyz" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM TB_QYZ
+		<where>
+
+			<if test="gcName != null and gcName != ''">
+				AND GCNAME LIKE '%'+#{gcName}+'%'
+			</if>
+			<if test="jsUnit != null and jsUnit != ''">
+				AND JSUNIT LIKE '%'+#{jsUnit}+'%'
+			</if>
+			<if test="regNumber != null and regNumber != ''">
+				AND REGNUMBER LIKE '%'+ #{regNumber}+'%'
+			</if>
+			<if test="zNumber != null and zNumber != ''">
+				AND zNUMBER LIKE '%'+ #{zNumber}+'%'
+			</if>
+			<if test="entryTime != null and entryTime != ''">AND ENTRYTIME >= #{entryTime} </if>
+			<if test="entryTime1 != null and entryTime1 != ''"> AND ENTRYTIME &lt;= #{entryTime1} </if>
+			<if test="state != null and state != ''">
+				AND STATE =#{state}
+			</if>
+			<if test="feeEntryTime != null and feeEntryTime != ''">AND FEEENTRYTIME >= #{feeEntryTime} </if>
+			<if test="feeEntryTime1 != null and feeEntryTime1 != ''"> AND FEEENTRYTIME &lt;= #{feeEntryTime} </if>
+			<if test="handle != null and handle != ''">
+				AND HANDLE =#{handle}
+			</if>
+			<if test="hdEntryTime != null and hdEntryTime != ''">AND HDENTRYTIME >= #{hdEntryTime} </if>
+			<if test="hdEntryTime1 != null and hdEntryTime1 != ''"> AND HDENTRYTIME &lt;= #{hdEntryTime} </if>
+			<if test="approved != null and approved != ''">
+				AND APPROVED =#{approved}
+			</if>
+			<if test="apEntryTime != null and apEntryTime != ''">AND APENTRYTIME >= #{apEntryTime} </if>
+			<if test="apEntryTime1 != null and apEntryTime1 != ''"> AND APENTRYTIME &lt;= #{apEntryTime} </if>
+			<if test="groupName != null and groupName != ''">
+				AND groupid in (SELECT id FROM gps_groups WHERE NAME LIKE
+				'%'+#{groupName}+'%')
+			</if>
+		</where>
+	</select>
+
+	<insert id="save" parameterType="Qyz" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO TB_QYZ
+		(gcType,cqtype,jsUnit, jsContact, jsTelephone,sgUnit, sgContact,sgTelephone ,gcName,site,fee,feeType,area,flat,tonnage,price,remark,manager,entryTime,photo)
+		VALUES(#{gcType},#{cqtype},#{jsUnit},#{jsContact},#{jsTelephone},#{sgUnit},#{sgContact},#{sgTelephone},#{gcName},#{site},#{fee},#{feeType},#{area},#{flat},
+		#{tonnage},#{price},#{remark},#{manager},#{entryTime},#{photo})
+	</insert>
+	<update id="feeOK" parameterType="hashmap">
+		UPDATE TB_QYZ SET regNumber =
+		dbo.Pro_GetSeqence(GETDATE()),
+		STATE=#{state},FEEMANAGER=#{feeManager},FEEENTRYTIME=#{feeEntryTime}
+		WHERE ID = #{id}
+	</update>
+	<update id="handle" parameterType="hashmap">
+		UPDATE TB_QYZ SET
+		HANDLE=#{handle},HDMANAGER=#{hdManager},HDENTRYTIME=#{hdEntryTime},
+		czArea=#{czArea},jsContact=#{jsContact},jsTelephone=#{jsTelephone},sgContact=#{sgContact},
+		sgTelephone=#{sgTelephone},zNumber=dbo.Pro_GetzNumber(GETDATE()) WHERE
+		ID = #{id}
+	</update>
+	<update id="zyzhz" parameterType="hashmap">
+		UPDATE TB_QYZ SET
+		promiseFileName=#{promiseFileName},polluteFileName=#{polluteFileName},roadFileName=#{roadFileName},promiseValue=#{promiseValue},polluteValue=#{polluteValue},roadValue=#{roadValue},approved=#{approved},apManager=#{apManager},groupId=#{groupId},apEntryTime
+		=#{apEntryTime} WHERE ID = #{id}
+	</update>
+	<select id="selectOne" parameterType="hashmap" resultType="Qyz">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM TB_QYZ
+		WHERE ID = #{id}
+	</select>
+</mapper>

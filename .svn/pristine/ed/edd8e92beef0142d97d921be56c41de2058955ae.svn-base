@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.slkj.jzlj.dao.BasicDataMapper">
+
+	<sql id="sql_base">
+		ID,CDNAME,CDHAS,AREA,ADDRESS,MANAGER,LINK
+	</sql>
+	<select id="czcdList" resultType="Czcd" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base" />
+		FROM tb_czcd
+		<where>
+			<if test="cdName != null and cdName != ''">
+				AND CDNAME  LIKE '%'+#{cdName}+'%'
+			</if>
+		</where>
+
+	</select>
+	<select id="czcdListPage" resultType="Czcd" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base" />
+		FROM tb_czcd
+		<where>
+			<if test="cdName != null and cdName != ''">
+				AND CDNAME  LIKE '%'+#{cdName}+'%'
+			</if>
+		</where>
+
+	</select>
+	<insert id="saveCzcd" parameterType="Czcd">
+		IF NOT EXISTS (SELECT * FROM tb_czcd WHERE CDNAME = #{cdName})
+		BEGIN
+		INSERT INTO tb_czcd(CDNAME,CDHAS,AREA,ADDRESS,MANAGER,LINK)
+		VALUES(#{cdName},#{cdHas},#{area},#{address},#{manager},#{link} )
+		END
+	</insert>
+</mapper>

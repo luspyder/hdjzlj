@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.slkj.jzlj.dao.VehicleMapper">
+    <sql id="sql_base">
+		id,selfNumber,carName,overduetime,sim,vedio,number,gprs,colorId,cpys,
+		sccj,mobileId,vehicleTypeId,clientID,group_id,remark,vKey,
+		av,recvtime,gpstime,(SELECT count(*) from tb_PPersonal WHERE tb_PPersonal.carId =gps_vehiclesInfo.id and state = 0 )as wzCount
+	</sql>
+    <select id="getAll" resultType="Vehicle" parameterType="hashmap">
+        SELECT
+        <include refid="sql_base"></include>
+        FROM gps_vehiclesInfo 
+        <where>
+            <if test="gid != null and gid != ''">
+                AND group_id = #{gid}
+            </if>
+			<if test="carName != null and carName != ''">
+				AND carName LIKE '%'+#{carName}+'%'
+			</if>
+        </where>
+         order by selfNumber
+    </select>
+	<select id="getList" resultType="Vehicle" parameterType="hashmap">
+		SELECT
+		<include refid="sql_base"></include>
+		FROM gps_vehiclesInfo
+		<where>
+			<if test="gid != null and gid != ''">
+				AND group_id = #{gid}
+			</if>
+			<if test="carName != null and carName != ''">
+				AND carName LIKE '%'+#{carName}+'%'
+			</if>
+		</where>
+	</select>
+    <select id="getAllTree" resultType="Vehicle" parameterType="hashmap">
+		SELECT ID, NAME, ''	vKEY,   GROUP_ID FROM gps_groups
+		UNION ALL
+		SELECT ID, carName as name, 	vKEY,  GROUP_ID FROM GPS_VEHICLES
+	</select>
+
+    <insert id="carToDB" parameterType="Vehicle">
+		IF NOT EXISTS (SELECT * FROM gps_vehiclesInfo WHERE id =#{id})
+			BEGIN
+			INSERT INTO gps_vehiclesInfo( id,selfNumber,carName,overduetime,sim,vedio,number,
+			gprs,colorId,cpys,sccj,mobileId,vehicleTypeId,clientID,vKey,av,recvtime,gpstime,group_id,remark)
+			VALUES(#{id},#{selfNumber},#{carName},#{overduetime},#{sim},#{vedio},#{number},#{gprs},#{colorId},
+			#{cpys},#{sccj},#{mobileId},#{vehicleTypeId},#{clientID},#{vKey},#{av},#{recvtime},#{gpstime},
+			#{group_id},#{remark} )
+		END
+	</insert>
+	
+	<select id="queryOne" resultType="Vehicle" parameterType="hashmap">
+		SELECT <include refid="sql_base"></include> FROM gps_vehiclesInfo where carName = #{carName}
+		 
+	</select>
+	
+</mapper>

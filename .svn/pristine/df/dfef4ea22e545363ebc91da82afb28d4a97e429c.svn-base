@@ -1,0 +1,117 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>车辆列表</title>
+<%@ include file="../common/taglibs.jsp"%>
+
+<script type="text/javascript">
+	var carGrid;
+	var dwGrid;
+	$(function() {
+		laodDw();
+		laodCar();
+	});
+	function laodCar() {
+		carGrid = $('#carListGrid').datagrid({
+			height : 550,
+			nowrap : true,
+			fit : true,
+			rownumbers : true,
+			striped : true,
+			singleSelect : true,
+			loadMsg : '数据加载中,请稍后……',
+			columns : [ [ {
+				field : 'selfNumber',
+				title : '自编号'
+			}, {
+				field : 'carName',
+				title : '车牌号'
+			}, {
+				field : '_opt',
+				title : '操作',
+				align : 'center',
+				width : 90,
+				formatter : function(val, row, index) {
+					return '<a class="gpscls" href="#" onclick="edit()">编辑</a>';
+				}
+			} ] ],
+			onLoadSuccess : function() {
+				carGrid.datagrid("fixRowHeight");
+			},
+		});
+	}
+	function laodDw() {
+		dwGrid = $('#dwListGrid').datagrid({
+			url : '../group/list.htmls',
+			height : 390,
+			nowrap : true,
+			fit : true,
+			striped : true,
+			singleSelect : true,
+			rownumbers : true,
+			loadMsg : '数据加载中,请稍后……',
+			columns : [ [ {
+				field : 'name',
+				title : '单位名称'
+			}, {
+				field : '_opt',
+				title : '操作',
+				align : 'center',
+				width : 90,
+				formatter : function(val, row, index) {
+					return '<a class="editcls" href="#" onclick="seeCar(' + row.id + ')">查看</a>';
+				}
+			} ] ],
+			onLoadSuccess : function() {
+				$(this).datagrid("fixRowHeight");
+			},
+		});
+	}
+	function seeCar(id) {
+		carGrid.datagrid({
+			url : '../vehicle/getAll.htmls',
+			queryParams : {
+				cid : id
+			}
+		});
+	}
+
+	function edit() {
+ 		SL.showWindow({
+			title : '车辆详细信息',
+			width : 520,
+			height : 410,
+			top : 40,
+			left : 150,
+			url : 'carInfo.jsp',
+			buttons : [ {
+				text : '确定',
+				iconCls : 'icon-ok',
+				handler : function() {
+					SL.closeWindow();
+				}
+			}, {
+				text : '关闭',
+				iconCls : 'icon-cancel',
+				handler : function() {
+					SL.closeWindow();
+				}
+			} ]
+		});
+	}
+</script>
+
+</head>
+<body class="easyui-layout" data-options="fit:true">
+
+	<div data-options="region:'west',split:true" style="width: 520px;">
+		<table id="dwListGrid"></table>
+	</div>
+	<div data-options="region:'center'" style="background: #eee;">
+		<table id="carListGrid"></table>
+	</div>
+
+</body>
+</html>

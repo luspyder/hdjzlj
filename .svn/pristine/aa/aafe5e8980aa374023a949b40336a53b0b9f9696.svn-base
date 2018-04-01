@@ -1,0 +1,272 @@
+package cn.slkj.jzlj.controller;
+
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.miemiedev.mybatis.paginator.domain.Order;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
+
+import cn.slkj.jzlj.model.Loan;
+import cn.slkj.jzlj.model.Transport;
+import cn.slkj.jzlj.service.TransportService;
+import cn.slkj.util.easyuiUtil.EPager;
+import cn.slkj.util.easyuiUtil.JsonResult;
+import cn.slkj.util.javaUtil.date.DateStyle;
+import cn.slkj.util.javaUtil.date.DateUtil;
+
+
+@Controller
+@RequestMapping(value = "/tran")
+public class TransportController {
+    @Resource
+    private TransportService transportService;
+
+    /**
+     * 查询列表，返回easyUI数据格式
+     */
+    @RequestMapping(value = "/list", method = {RequestMethod.POST})
+    public
+    @ResponseBody
+    EPager<Transport> getAlls(String groupId, String groupName, String gcName, String vdTimeStart, String vdTimeEend, String jsUnit, String zNumber, String approved, @RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "20") Integer rows) {
+        String sortString = "";
+        sortString = "entryTime.desc";
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("groupName", groupName);
+        hashMap.put("groupId", groupId);
+        hashMap.put("gcName", gcName);
+        hashMap.put("vdTimeStart", vdTimeStart);
+        hashMap.put("vdTimeEend", vdTimeEend);
+        hashMap.put("jsUnit", jsUnit);
+        hashMap.put("zNumber", zNumber);
+        hashMap.put("approved", approved);
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//可以方便地修改日期格式
+        String hehe = dateFormat.format(now);
+        hashMap.put("nowTime",hehe);
+        PageBounds pageBounds = new PageBounds(page, rows, Order.formString(sortString));
+        List<Transport> list = transportService.getAll(hashMap, pageBounds);
+        PageList<Transport> pageList = (PageList<Transport>) list;
+        return new EPager<Transport>(pageList.getPaginator().getTotalCount(), list);
+    }
+
+/*历史查询*/
+    @RequestMapping("/getList")
+    public
+    @ResponseBody
+    EPager<Transport> getList(String groupId, String groupName, String gcName, String vdTimeStart, String vdTimeEend, String jsUnit, String zNumber, String approved, @RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "20") Integer rows) {
+        String sortString = "";
+        sortString = "entryTime.desc";
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("groupName", groupName);
+        hashMap.put("groupId", groupId);
+        hashMap.put("gcName", gcName);
+        hashMap.put("vdTimeStart", vdTimeStart);
+        hashMap.put("vdTimeEend", vdTimeEend);
+        hashMap.put("jsUnit", jsUnit);
+        hashMap.put("zNumber", zNumber);
+        hashMap.put("approved", approved);
+        Date now = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");//可以方便地修改日期格式
+        String hehe1 = dateFormat.format(now);
+        hashMap.put("nowTime1",hehe1);
+        PageBounds pageBounds = new PageBounds(page, rows, Order.formString(sortString));
+        List<Transport> list = transportService.getAll(hashMap, pageBounds);
+        PageList<Transport> pageList = (PageList<Transport>) list;
+        return new EPager<Transport>(pageList.getPaginator().getTotalCount(), list);
+    }
+
+    /**
+     * 保存信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JsonResult save(@RequestParam(value = "ids[]") String[] ids,
+                    String fid, String jsUnit, String groupName, String gcName, String site,
+                    String carNumber, String czArea, String line, String vdTimeStart,
+                    String vdTimeEend, String managers, String groupId, String gcId, String jdGroupId, String approved) {
+        try {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+
+//			 map.put("fid", fid);
+            map.put("jsUnit", jsUnit);
+            map.put("gcName", gcName);
+            map.put("site", site);
+            map.put("carNumber", carNumber);
+            map.put("czArea", czArea);
+            map.put("line", line);
+            map.put("vdTimeStart", vdTimeStart);
+            map.put("vdTimeEend", vdTimeEend);
+            map.put("managers", managers);
+            map.put("approved", approved);
+            map.put("groupId", groupId);
+            map.put("groupName", groupName);
+            map.put("jdGroupId", jdGroupId);
+            String entryTime = DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM);
+            map.put("entryTime", entryTime);
+            int i = 0;
+            for (int j = 0; j < ids.length; j++) {
+                map.put("id", ids[j]);
+                i += transportService.save(map);
+                if (jdGroupId != groupId) {
+                    HashMap<String, Object> hashMap = new HashMap<String, Object>();
+                    hashMap.put("carId", ids[j]);
+                    hashMap.put("managers", managers);
+                    hashMap.put("approved", approved);
+                    hashMap.put("jdTime", entryTime);
+//                    hashMap.put("gcId", gcId);
+                    
+                    hashMap.put("groupId", groupId);
+                    hashMap.put("gcName", gcName);
+                    transportService.saveLoan(hashMap);
+                }
+            }
+            if (i > 0) {
+
+                return new JsonResult(true, "操作成功。");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(false, "系统异常，操作失败！");
+        }
+        return new JsonResult(false, "操作失败！");
+    }
+
+    /**
+     * 核准
+     * 单个车辆更新
+     *
+     * @return
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JsonResult update(String id, String approved, String czy, String czyId) {
+        try {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("approved", approved);
+            map.put("czy", czy);
+            map.put("czyId", czyId);
+            String entryTime = DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM);
+            map.put("avTime", entryTime);
+            map.put("id", id);
+
+            int i = 0;
+            i = transportService.approved(map);
+            if (i > 0) {
+
+                return new JsonResult(true, "操作成功。");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(false, "系统异常，操作失败！");
+        }
+        return new JsonResult(false, "操作失败！");
+    }
+
+    /**
+     * 核准
+     * 多个车辆更新
+     */
+    @RequestMapping(value = "/approveds", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    JsonResult update(@RequestParam(value = "ids[]") String[] ids, String approved, String czy, String czyId) {
+        try {
+            HashMap<String, Object> map = new HashMap<String, Object>();
+            map.put("approved", approved);
+            map.put("czy", czy);
+            map.put("czyId", czyId);
+            String entryTime = DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM);
+            map.put("avTime", entryTime);
+            map.put("ids", ids);
+
+            int i = 0;
+            i = transportService.approveds(map);
+            if (i > 0) {
+                return new JsonResult(true, "操作成功。");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JsonResult(false, "系统异常，操作失败！");
+        }
+        return new JsonResult(false, "操作失败！");
+    }
+
+    /**
+     * 查询借调列表，返回easyUI数据格式
+     */
+    @RequestMapping(value = "/listLoan", method = {RequestMethod.POST})
+    public
+    @ResponseBody
+    EPager<Loan> getAllLoan(String gcName, String jdTimeStart, String jdTimeEend, String carName, @RequestParam(required = false, defaultValue = "1") Integer page, @RequestParam(required = false, defaultValue = "20") Integer rows) {
+        String sortString = "";
+        sortString = "jdTime.desc";
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("gcName", gcName);
+        hashMap.put("jdTime", jdTimeStart);
+        hashMap.put("jdTime1", jdTimeEend);
+        hashMap.put("carName", carName);
+        PageBounds pageBounds = new PageBounds(page, rows, Order.formString(sortString));
+        List<Loan> list = transportService.getAllLoan(hashMap, pageBounds);
+        PageList<Loan> pageList = (PageList<Loan>) list;
+        return new EPager<Loan>(pageList.getPaginator().getTotalCount(), list);
+    }
+
+    /**
+     * 导出清运证审核表
+     *
+     * @param response
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/exporzm")
+    @ResponseBody
+    public String exporzm(HttpServletResponse response, HttpServletRequest request) {
+        response.setContentType("application/binary;charset=ISO8859_1");
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            String fileName = new String(("清运证审核汇总").getBytes(), "ISO8859_1");
+            response.setHeader("Content-disposition", "attachment; filename=" + fileName + ".xlsx");// 组装附件名称和格式
+            String[] titles = {"车牌号", "所属单位", "工程名称", "建设单位", "施工地点", "路线", "有效期始", "有效期至", "办理人", "办理时间", "审核时间", "处置场地", "借调车辆ID"};
+            HashMap<String, Object> pageMap = new HashMap<String, Object>();
+            pageMap.put("carNumber", request.getParameter("carNumber"));
+            pageMap.put("groupId", request.getParameter("groupId"));
+            pageMap.put("gcName", request.getParameter("gcName"));
+            pageMap.put("jsUnit", request.getParameter("jsUnit"));
+            pageMap.put("site", request.getParameter("site"));
+            pageMap.put("line", request.getParameter("line"));
+            pageMap.put("vdTimeStart", request.getParameter("vdTimeStart"));
+            pageMap.put("vdTimeEend", request.getParameter("vdTimeEend"));
+            pageMap.put("managers", request.getParameter("managers"));
+            pageMap.put("entryTime", request.getParameter("entryTime"));
+            pageMap.put("avTime", request.getParameter("avTime"));
+            pageMap.put("czArea", request.getParameter("czArea"));
+            pageMap.put("jdGroupId", request.getParameter("jdGroupId"));
+
+            transportService.exportExcel(pageMap, titles, outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}

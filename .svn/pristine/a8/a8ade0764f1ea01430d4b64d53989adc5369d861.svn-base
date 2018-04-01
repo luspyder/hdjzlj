@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <setting name="cacheEnabled" value="false"/>
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!--解决控制台不打印SQL语句-->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    <!-- 别名配置 -->
+    <typeAliases>
+        <typeAlias alias="User" type="cn.slkj.jzlj.model.User"/>
+        <typeAlias alias="Module" type="cn.slkj.jzlj.model.Module"/>
+        <typeAlias alias="Role" type="cn.slkj.jzlj.model.Role"/>
+        <typeAlias alias="Qyz" type="cn.slkj.jzlj.model.Qyz"/>
+        <typeAlias alias="Transport" type="cn.slkj.jzlj.model.Transport"/>
+        <typeAlias alias="Group" type="cn.slkj.jzlj.model.Group"/>
+        <typeAlias alias="PCompany" type="cn.slkj.jzlj.model.PCompany"/>
+        <typeAlias alias="PPersonal" type="cn.slkj.jzlj.model.PPersonal"/>
+        <typeAlias alias="Vehicle" type="cn.slkj.jzlj.model.Vehicle"/>
+        <typeAlias alias="Loan" type="cn.slkj.jzlj.model.Loan"/>
+        <typeAlias alias="Czcd" type="cn.slkj.jzlj.model.Czcd"/>
+        <typeAlias alias="Department" type="cn.slkj.jzlj.model.Department"/>
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+            <property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.SQLServer2005Dialect"/>
+        </plugin>
+    </plugins>
+    <mappers>
+        <mapper resource="cn/slkj/jzlj/mapping/ModuleMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/UserMapper.xml"></mapper>
+        <mapper resource="cn/slkj/jzlj/mapping/RoleMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/QyzMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/TransportMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/GroupMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/PeccancyMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/VehicleMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/BasicDataMapper.xml"/>
+        <mapper resource="cn/slkj/jzlj/mapping/DepartmentMapper.xml"/>
+    </mappers>
+</configuration>

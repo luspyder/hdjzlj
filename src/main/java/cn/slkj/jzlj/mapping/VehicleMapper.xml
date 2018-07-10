@@ -18,7 +18,7 @@
 				AND carName LIKE '%'+#{carName}+'%'
 			</if>
         </where>
-         order by selfNumber
+         order by len(selfNumber),LEFT(selfNumber,4)
     </select>
 	<select id="getList" resultType="Vehicle" parameterType="hashmap">
 		SELECT

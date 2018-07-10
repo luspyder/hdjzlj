@@ -189,7 +189,7 @@
             LODOP.ADD_PRINT_TEXT(240, 100, 200, 20, "施工地点：" + row.site);
             LODOP.ADD_PRINT_TEXT(270, 100, 200, 20, "运输单位：" + row.groupName);
             LODOP.ADD_PRINT_TEXT(290, 100, 200, 20, "车牌号：" + carNumber);
-            LODOP.ADD_PRINT_TEXT(310, 100, 200, 65, "路线：（晚23点至早6点通行）" + row.line);
+            LODOP.ADD_PRINT_TEXT(310, 100, 200, 65, "路线：（晚23点至早5点通行）" + row.line);
             LODOP.ADD_PRINT_TEXT(370, 100, 200, 20, "处置场地：" + row.czArea);
             var da1 = DateUtil.dateToStr("yy.MM.dd", DateUtil.strToDate(row.vdTimeStart));
             var da2 = DateUtil.dateToStr("yy.MM.dd", DateUtil.strToDate(row.vdTimeEend));
@@ -202,7 +202,7 @@
             LODOP.SET_PRINT_STYLEA(0, "FontSize", 11);
             LODOP.ADD_PRINT_TEXT(310, 320, 300, 25, "车 牌 号: " + carNumber);
             LODOP.SET_PRINT_STYLEA(0, "FontSize", 11);
-            LODOP.ADD_PRINT_TEXT(330,320,614,50, "路    线: （晚23点至早6点通行）" + row.line);
+            LODOP.ADD_PRINT_TEXT(330,320,614,50, "路    线: （晚23点至早5点通行）" + row.line);
             LODOP.SET_PRINT_STYLEA(0, "FontSize", 11);
             var da3 = DateUtil.dateToStr("yyyy-MM-dd", DateUtil.strToDate(row.vdTimeStart));
             var da4 = DateUtil.dateToStr("yyyy-MM-dd", DateUtil.strToDate(row.vdTimeEend));

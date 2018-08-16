@@ -104,7 +104,7 @@ public class TransportController {
     JsonResult save(@RequestParam(value = "ids[]") String[] ids,
                     String fid, String jsUnit, String groupName, String gcName, String site,
                     String carNumber, String czArea, String line, String vdTimeStart,
-                    String vdTimeEend, String managers, String groupId, String gcId, String jdGroupId, String approved) {
+                    String vdTimeEend, String managers, String groupId, String gcId, String jdGroupId, String approved,String vdTime) {
         try {
             HashMap<String, Object> map = new HashMap<String, Object>();
 
@@ -122,6 +122,8 @@ public class TransportController {
             map.put("groupId", groupId);
             map.put("groupName", groupName);
             map.put("jdGroupId", jdGroupId);
+            map.put("vdTime", vdTime);
+            
             String entryTime = DateUtil.DateToString(new Date(), DateStyle.YYYY_MM_DD_HH_MM);
             map.put("entryTime", entryTime);
             int i = 0;

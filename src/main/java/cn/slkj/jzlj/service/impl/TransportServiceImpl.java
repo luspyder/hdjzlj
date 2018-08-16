@@ -162,5 +162,10 @@ public class TransportServiceImpl implements TransportService {
 		return mapper.getCountZZ();
 	}
 
+	@Override
+	public List<Transport> getListByCar(HashMap<String, Object> map) {
+		return mapper.getListByCar(map);
+	}
+
 }
 

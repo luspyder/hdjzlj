@@ -81,10 +81,14 @@
                         {
                             field: 'vdTime', title: '有效期',
                             formatter: function (val, row, index) {
+                            	 var vt = row.vdTime;
+                            	if(vt == null){
+                            		vt="";
+                            	}
                                 if (row.vdTimeEend != null
                                     || row.vdTimeEend != undefined) {
                                     return row.vdTimeStart + "/"
-                                        + row.vdTimeEend;
+                                        + row.vdTimeEend+"/" +vt;
                                 }
 
                             }
@@ -158,8 +162,8 @@
 //             }
             initView(row);
 //             LODOP.PREVIEW();
-//             LODOP.PRINT_DESIGN();
-            LODOP.PRINTA();
+            LODOP.PRINT_DESIGN();
+//             LODOP.PRINTA();
         }
         var LODOP; //声明为全局变量
         function initView(row) {
@@ -193,8 +197,8 @@
             LODOP.ADD_PRINT_TEXT(370, 100, 200, 20, "处置场地：" + row.czArea);
             var da1 = DateUtil.dateToStr("yy.MM.dd", DateUtil.strToDate(row.vdTimeStart));
             var da2 = DateUtil.dateToStr("yy.MM.dd", DateUtil.strToDate(row.vdTimeEend));
-            LODOP.ADD_PRINT_TEXT(390, 100, 205, 20, "有效日期：" + da1 + " - " + da2);
-
+            LODOP.ADD_PRINT_TEXT(390, 100, 200, 20, "有效日期：" + da1 + " - " + da2);
+            LODOP.ADD_PRINT_TEXT(410, 140, 150, 20,  row.vdTime);
             //右侧清运信息
             LODOP.ADD_PRINT_TEXT(220, 320, 300, 25, "建设单位: " + row.jsUnit);
             LODOP.SET_PRINT_STYLEA(0, "FontSize", 11);
@@ -207,6 +211,7 @@
             var da3 = DateUtil.dateToStr("yyyy-MM-dd", DateUtil.strToDate(row.vdTimeStart));
             var da4 = DateUtil.dateToStr("yyyy-MM-dd", DateUtil.strToDate(row.vdTimeEend));
             LODOP.ADD_PRINT_TEXT(385,320,525,25, "有效日期： " + da3 + "至" + da4);
+            LODOP.ADD_PRINT_TEXT(410,369,340,25,row.vdTime);
             LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
             LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
             LODOP.ADD_PRINT_TEXT(220, 650, 320, 25, "工程名称： " + row.gcName);
@@ -235,6 +240,8 @@
                         $.each(rows, function (index, item) {
                             initView(item);
                             LODOP.PRINT();
+//                             LODOP.PRINT_SETUP(); 
+                            
                         });
                     }
                 });

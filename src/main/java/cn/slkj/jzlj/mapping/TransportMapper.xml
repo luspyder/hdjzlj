@@ -4,7 +4,7 @@
 
     <sql id="sql_base">
 	tbt.id,carId,(gpsv.selfNumber + gpsv.carName) as carNumber,zNumber,czzId,jsUnit,gcName,site,approved,
-	czArea,line,vdTimeStart,vdTimeEend,managers,entryTime,groupName,groupId,jdgroupId,czy,avTime
+	czArea,line,vdTimeStart,vdTimeEend,managers,entryTime,groupName,groupId,jdgroupId,czy,avTime,vdTime
 	</sql>
     <select id="getAll" resultType="Transport">
         SELECT
@@ -87,18 +87,30 @@
         </where>
         order by carNumber
     </select>
-
+ 	<select id="getListByCar" resultType="Transport" parameterType="hashmap">
+        SELECT
+        <include refid="sql_base"></include>
+        FROM TB_TRANSPORT tbt,gps_vehiclesInfo gpsv
+        <where>
+            tbt.carId = gpsv.id
+            <if test="carId != null and carId != ''">
+                AND carId  = #{carId}
+            </if>
+             and convert(DATE,vdTimeEend,120 )>= convert(DATE,GETDATE(),120) 
+        </where>
+        order by carNumber
+    </select>
 
 
     <insert id="save" parameterType="hashmap">
         INSERT INTO TB_TRANSPORT
-        (carId,carNumber,zNumber,czzId,jsUnit,gcName,site,approved,czArea,line,vdTimeStart,vdTimeEend,managers,entryTime,groupName,groupId,jdGroupId)
+        (carId,carNumber,zNumber,czzId,jsUnit,gcName,site,approved,czArea,line,vdTimeStart,vdTimeEend,managers,entryTime,groupName,groupId,jdGroupId,vdTime)
         values
         <!-- 		<foreach collection="ids" index="index" item="item"  separator=","  > -->
 
         (#{id},(select carName from gps_vehiclesInfo where id =
         #{id}),dbo.Pro_Getqyzbh(GETDATE()),#{czzId},#{jsUnit},#{gcName},#{site},#{approved},#{czArea},
-        #{line},#{vdTimeStart},#{vdTimeEend},#{managers},#{entryTime},#{groupName},#{groupId},#{jdGroupId})
+        #{line},#{vdTimeStart},#{vdTimeEend},#{managers},#{entryTime},#{groupName},#{groupId},#{jdGroupId},#{vdTime})
         <!--         </foreach> -->
 
     </insert>

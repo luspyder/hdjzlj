@@ -75,7 +75,17 @@
                         <input id="vdTimeEend" name="vdTimeEend" class="Wdate" style="width: 40%"
                                type="text" onFocus="endTimeFocus()"/>
                     </td>
-                </tr>
+                </tr> 
+<!-- 				<tr> -->
+<!-- 					<td> </td> -->
+<!--                     <td > -->
+<!--                         <input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" checked="checked" value="20：00至次日6:00"><label>20：00至次日6:00</label></input> -->
+<!--            				<br/> -->
+<!--            				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="护照"><label>护照</label></input> -->
+<!--            				<br/> -->
+<!--            				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="护照"><label>护照</label></input> -->
+<!--                     </td> -->
+<!--                 </tr> -->
                 <tr>
                     <td colspan="2" align="center">
                         <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveTranspot()">办理</a>

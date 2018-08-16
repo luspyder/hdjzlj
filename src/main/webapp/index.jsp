@@ -11,7 +11,7 @@
 <script type="text/javascript" src="easyui/1.4.5/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="easyui/1.4.5/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/echarts.common.min.js"></script>
+<!-- <script type="text/javascript" src="js/echarts.common.min.js"></script> -->
 <script type="text/javascript">
 	// 指定图表的配置项和数据
 	var option2 = {
@@ -45,14 +45,14 @@
 				}
 			});
 		})
-		$('#openJSZC').click(function() {
+		/* $('#openJSZC').click(function() {
 			$('#dd').dialog('open');
 		})
 		loadGcTypeTJ();
 		loadzzTJ(); 
 
 		var myChart2 = echarts.init(document.getElementById('main2'));
-		myChart2.setOption(option2);
+		myChart2.setOption(option2); */
 	})
 	/*ajax获取菜单数据*/
 	function loadModuleData() {
@@ -189,23 +189,26 @@
 	<!-- begin of main -->
 	<div class="wu-main" data-options="region:'center'">
 		<div id="wu-tabs" class="easyui-tabs" data-options="border:false,fit:true">
+<!-- 			<div title="首页" data-options="href:'',closable:false,iconCls:'icon-tip',cls:'pd3'"> -->
+<!-- 				<div style="width: 500px; height: 300px; margin: 10px; float: left;"> -->
+<!-- 					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;"> -->
+<!-- 						<div id="main" style="width: 100%; height: 100%;"></div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div style="width: 500px; height: 300px; margin: 10px; float: left;"> -->
+<!-- 					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;"> -->
+<!-- 						<div id="main1" style="width: 100%; height: 100%;"></div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div style="width: 500px; height: 300px; margin: 10px; float: left;"> -->
+<!-- 					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;"> -->
+<!-- 						<div id="main2" style="width: 100%; height: 100%;"></div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 			<div title="首页" data-options="href:'',closable:false,iconCls:'icon-tip',cls:'pd3'">
-				<div style="width: 500px; height: 300px; margin: 10px; float: left;">
-					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;">
-						<div id="main" style="width: 100%; height: 100%;"></div>
-					</div>
-				</div>
-				<div style="width: 500px; height: 300px; margin: 10px; float: left;">
-					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;">
-						<div id="main1" style="width: 100%; height: 100%;"></div>
-					</div>
-				</div>
-				<div style="width: 500px; height: 300px; margin: 10px; float: left;">
-					<div class="easyui-panel" style="width: 500px; height: 300px; float: left;">
-						<div id="main2" style="width: 100%; height: 100%;"></div>
-					</div>
-				</div>
-			</div>
+		            <div style="width: 540px;height:444px;background: url(images/bg_home.png);"></div>
+		        </div>
 		</div>
 	</div>
 	<!-- end of main -->

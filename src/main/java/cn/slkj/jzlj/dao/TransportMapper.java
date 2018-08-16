@@ -25,4 +25,6 @@ public interface TransportMapper {
 
     int saveLoan(HashMap<String, Object> map);
     List<Map<String, String>> getCountZZ();
+    
+    List<Transport> getListByCar(HashMap<String, Object> map);
 }

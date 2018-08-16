@@ -27,4 +27,6 @@ public interface TransportService {
     public void exportExcel(HashMap<String, Object> map, String[] titles, ServletOutputStream outputStream);
     
     List<Map<String, String>> getCountZZ();
+    
+    List<Transport> getListByCar(HashMap<String, Object> map);
 }

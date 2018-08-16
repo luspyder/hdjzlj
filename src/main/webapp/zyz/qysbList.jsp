@@ -187,7 +187,7 @@
                             striped: true,
                             singleSelect: true,
                             loadMsg: '数据加载中,请稍后……',
-                            columns: [[{field: 'selfNumber', title: '自编号',width: 70},
+                            columns: [[{field: 'selfNumber', title: '自编号',width: 100},
                                 {field: 'carName', title: '车牌号'},
                                 {
                                     field: 'wzCount', title: '违章情况', align: 'center',
@@ -199,7 +199,7 @@
                                     }
                                 },
                                 {
-                                    field: 'state2', title: '状态', width: 50, align: 'center',
+                                    field: 'state2', title: '状态', width: 80, align: 'center',
                                     formatter: function (val, row, index) {
                                         // 第一步、根据gps时间和服务器时间是否相同，判断是 在线 还是 离线。
                                         // 第二步、判断是否有速度，没有速度显示静止

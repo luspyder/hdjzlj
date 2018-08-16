@@ -20,6 +20,8 @@ public class Transport {
     private String line;// 路线
     private String vdTimeStart;// 有效期起
     private String vdTimeEend;// 有效期止
+    private String vdTime;//有效时间段
+    
     private String managers;// 经办人
     private String entryTime;// 录入时间
     private String groupId;// 车辆ID
@@ -192,7 +194,15 @@ public class Transport {
         this.nowTime = nowTime;
     }
 
-    @Override
+    public String getVdTime() {
+		return vdTime;
+	}
+
+	public void setVdTime(String vdTime) {
+		this.vdTime = vdTime;
+	}
+
+	@Override
     public String toString() {
         return "Transport{" +
                 "id='" + id + '\'' +

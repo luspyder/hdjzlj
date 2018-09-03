@@ -76,16 +76,17 @@
                                type="text" onFocus="endTimeFocus()"/>
                     </td>
                 </tr> 
-<!-- 				<tr> -->
-<!-- 					<td> </td> -->
-<!--                     <td > -->
-<!--                         <input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" checked="checked" value="20：00至次日6:00"><label>20：00至次日6:00</label></input> -->
-<!--            				<br/> -->
-<!--            				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="护照"><label>护照</label></input> -->
-<!--            				<br/> -->
-<!--            				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="护照"><label>护照</label></input> -->
-<!--                     </td> -->
-<!--                 </tr> -->
+				<tr>
+					<td> </td>
+                    <td >
+                    	<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" checked="checked"  value="晚21：00-次日早6:00"><label>晚21：00-次日早6:00</label></input>
+                       	<br/>
+                        <input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="上午9:00-11：30"><label>上午9:00-11：30</label></input>
+           				<br/>
+           				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="下午15:00-17:30"><label>下午15:00-17:30</label></input>
+           				
+                    </td>
+                </tr>
                 <tr>
                     <td colspan="2" align="center">
                         <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveTranspot()">办理</a>

@@ -306,6 +306,7 @@
                     vdTimeEend: $('#vdTimeEend').val(),
                     managers: $('#managers').val(),
                     groupId: $('#groupId').val(),
+                    vdTime: $("input[id='vdTime']:checked").val(),
                     jdGroupId: $('#jdGroupId').val()
                 };
                 $.ajax({

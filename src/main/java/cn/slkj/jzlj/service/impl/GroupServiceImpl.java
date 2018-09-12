@@ -26,4 +26,14 @@ public class GroupServiceImpl implements GroupService {
     public int save(Group group) {
         return mapper.save(group);
     }
+
+	@Override
+	public int edit(Group group) {
+		return mapper.edit(group);
+	}
+
+	@Override
+	public int delete(String id) {
+		return mapper.delete(id);
+	}
 }

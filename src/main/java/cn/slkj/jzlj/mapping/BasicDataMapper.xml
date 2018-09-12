@@ -44,4 +44,12 @@
 		selfNumber=#{selfNumber},carName=#{carName}
 		WHERE ID =#{id}
 	</update>
+	<insert id="save" parameterType="hashmap">
+		INSERT INTO GPS_VEHICLESINFO(ID,CARNAME,SELFNUMBER,GROUP_ID)
+		VALUES(#{id},#{carName},#{selfNumber},#{groupid} )
+	</insert>
+	
+	<delete id="delete" parameterType="string">
+		DELETE FROM GPS_VEHICLESINFO WHERE ID = #{id}
+	</delete>
 </mapper>

@@ -31,14 +31,12 @@ public class BasicDataController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/czcdListPage")
-	public EPager<Czcd> czcdListPage(String cdName,
-			@RequestParam(required = false, defaultValue = "1") Integer page, // 第几页
+	public EPager<Czcd> czcdListPage(String cdName, @RequestParam(required = false, defaultValue = "1") Integer page, // 第几页
 			@RequestParam(required = false, defaultValue = "20") Integer rows) {
 		String sortString = "";
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("cdName", cdName);
-		PageBounds pageBounds = new PageBounds(page, rows,
-				Order.formString(sortString));
+		PageBounds pageBounds = new PageBounds(page, rows, Order.formString(sortString));
 		List<Czcd> list = basicDataService.czcdListPage(hashMap, pageBounds);
 		PageList<Czcd> pageList = (PageList<Czcd>) list;
 		return new EPager<Czcd>(pageList.getPaginator().getTotalCount(), list);
@@ -78,8 +76,7 @@ public class BasicDataController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/editVeh", method = { RequestMethod.POST })
-	public JsonResult edit( String id,
-			String selfNumber, String carName) {
+	public JsonResult edit(String id, String selfNumber, String carName) {
 		HashMap<String, Object> hashMap = new HashMap<String, Object>();
 		hashMap.put("id", id);
 		hashMap.put("selfNumber", selfNumber);
@@ -95,4 +92,39 @@ public class BasicDataController {
 		}
 		return new JsonResult(false, "修改失败！");
 	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveVeh", method = { RequestMethod.POST })
+	public JsonResult save(String groupid, String selfNumber, String carName) {
+		HashMap<String, Object> hashMap = new HashMap<String, Object>();
+		hashMap.put("id", (int)((Math.random()*9+1)*100000));
+		hashMap.put("groupid", groupid);
+		hashMap.put("selfNumber", selfNumber);
+		hashMap.put("carName", carName);
+		try {
+			int i = basicDataService.save(hashMap);
+			if (i != -1) {
+				return new JsonResult(true, "修改成功。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "系统异常，修改失败！");
+		}
+		return new JsonResult(false, "修改失败！");
+	}
+	@ResponseBody
+	@RequestMapping(value = "/delete", method = { RequestMethod.POST })
+	public JsonResult delete(String id) {
+		try {
+			int i = basicDataService.delete(id);
+			if (i != -1) {
+				return new JsonResult(true, "删除成功。");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new JsonResult(false, "系统异常，修改失败！");
+		}
+		return new JsonResult(false, "删除失败！");
+	}
+
 }

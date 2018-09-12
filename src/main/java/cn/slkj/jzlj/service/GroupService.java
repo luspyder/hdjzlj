@@ -20,4 +20,8 @@ public interface GroupService {
      * @return
      */
     int save(Group group);
+
+	int edit(Group group);
+
+	int delete(String id);
 }

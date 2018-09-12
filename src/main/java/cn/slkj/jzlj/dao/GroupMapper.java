@@ -23,4 +23,8 @@ public interface GroupMapper {
 	 * @return
 	 */
 	public int save(Group group);
+
+	public int edit(Group group);
+
+	public int delete(String id);
 }

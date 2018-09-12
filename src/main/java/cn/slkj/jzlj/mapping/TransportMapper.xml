@@ -96,6 +96,9 @@
             <if test="carId != null and carId != ''">
                 AND carId  = #{carId}
             </if>
+            <if test="gprs != null and gprs != ''">
+				AND gpsv.gprs  = #{gprs} 
+			</if>
              and convert(DATE,vdTimeEend,120 )>= convert(DATE,GETDATE(),120) 
         </where>
         order by carNumber

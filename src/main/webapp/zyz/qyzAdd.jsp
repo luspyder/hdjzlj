@@ -79,11 +79,12 @@
 				<tr>
 					<td> </td>
                     <td >
-                    	<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" checked="checked"  value="晚21：00-次日早6:00"><label>晚21：00-次日早6:00</label></input>
-                       	<br/>
-                        <input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="上午9:00-11：30"><label>上午9:00-11：30</label></input>
+                    	<br/>
+                        <input id="vdTime" type="checkbox" name="vdTime"  value="上午9:00-11：30"><label>上午9:00-11：30</label></input>
            				<br/>
-           				<input id="vdTime" type="radio" name="vdTime"  class="easyui-validatebox" value="下午15:00-17:30"><label>下午15:00-17:30</label></input>
+           				<input id="vdTime" type="checkbox" name="vdTime"  value="下午15:00-17:30"><label>下午15:00-17:30</label></input>
+							<br/>
+           				<input id="vdTime" type="checkbox" name="vdTime" checked="checked"  value="晚21：00-次日早6:00"><label>晚21：00-次日早6:00</label></input>
            				
                     </td>
                 </tr>

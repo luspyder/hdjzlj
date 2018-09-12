@@ -27,4 +27,8 @@ public interface BasicDataService {
 	List<Czcd> czcdListPage(HashMap<String, Object> hashMap, PageBounds pageBounds);
 
 	int edit(HashMap<String, Object> hashMap);
+
+	int save(HashMap<String, Object> hashMap);
+
+	int delete(String id);
 }

@@ -17,4 +17,10 @@
 			INSERT INTO gps_groups(  id,name ) VALUES(#{id},#{name} )
 		END
 	</insert>
+	<update id="edit" parameterType="Group">
+		 UPDATE GPS_GROUPS  SET name  = #{name} WHERE ID = #{id}  
+	</update>
+	<delete id="delete" parameterType="string">
+		DELETE FROM GPS_GROUPS WHERE ID = #{id}
+	</delete>
 </mapper>

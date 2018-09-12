@@ -291,6 +291,9 @@
             }
             if ($("#czzPostForm").form('enableValidation').form('validate')) {
 // 			var data = $('#czzPostForm').serialize();
+var vals = $("input:checkbox[name='vdTime']:checked").map(function(index,elem) {
+					return $(elem).val();
+				}).get().join(',');
                 var data = {
                     ids: ids,
 // 					fid : $('#fid').val(),
@@ -306,7 +309,7 @@
                     vdTimeEend: $('#vdTimeEend').val(),
                     managers: $('#managers').val(),
                     groupId: $('#groupId').val(),
-                    vdTime: $("input[id='vdTime']:checked").val(),
+                    vdTime: vals,
                     jdGroupId: $('#jdGroupId').val()
                 };
                 $.ajax({

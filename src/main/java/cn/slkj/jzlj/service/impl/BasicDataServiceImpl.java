@@ -38,4 +38,15 @@ public class BasicDataServiceImpl implements BasicDataService {
 		return mapper.edit(hashMap);
 	}
 
+	@Override
+	public int save(HashMap<String, Object> hashMap) {
+		return mapper.save(hashMap);
+	}
+
+	@Override
+	public int delete(String id) {
+		// TODO Auto-generated method stub
+		return mapper.delete(id);
+	}
+
 }

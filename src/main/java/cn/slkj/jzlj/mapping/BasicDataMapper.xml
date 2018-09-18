@@ -45,8 +45,8 @@
 		WHERE ID =#{id}
 	</update>
 	<insert id="save" parameterType="hashmap">
-		INSERT INTO GPS_VEHICLESINFO(ID,CARNAME,SELFNUMBER,GROUP_ID)
-		VALUES(#{id},#{carName},#{selfNumber},#{groupid} )
+		INSERT INTO GPS_VEHICLESINFO(ID,CARNAME,SELFNUMBER,GROUP_ID,VKEY)
+		VALUES(#{id},#{carName},#{selfNumber},#{groupid},"" )
 	</insert>
 	
 	<delete id="delete" parameterType="string">
